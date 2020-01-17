@@ -16,16 +16,40 @@
                     </div>
                 </div>
 
-                <!--<a :href="value.url" target="_blank" class="stretched-link"></a>-->
+                <!--<a :href="value.url" target="_blank" class=""></a>-->
             </div>
+        </div>
+        <div class="mt-8 flex justify-center">
+            <button v-if="this.page > 0" v-on:click="prev"
+                    class="w-24 h12 border-2 border-gray-600 font-mono mr-2">
+                &lt;&lt; Prev
+            </button>
+            <button v-on:click="next" class="w-24 h12 border-2 border-gray-600 font-mono">Next &gt;&gt;</button>
         </div>
     </section>
 </template>
 
 <script>
-    import {NODE_ID, LIST} from '../constants/store'
+    import {NODE_ID, LIST, PAGE} from '../constants/store'
+    import {mapGetters} from 'vuex'
 
     export default {
+        computed: {
+            ...mapGetters({
+                page: PAGE
+            })
+        },
+        methods: {
+            prev() {
+                this.pagination(-1)
+            },
+            next() {
+                this.pagination(1)
+            },
+            pagination(direction) {
+                return this.$store.dispatch(PAGE, (this.page + direction))
+            }
+        },
         async mounted() {
             await this.$store.dispatch(NODE_ID)
             await this.$store.dispatch(LIST)
