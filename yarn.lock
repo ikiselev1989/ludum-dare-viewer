@@ -4749,6 +4749,11 @@ lower-case@^1.1.1:
   resolved "https://registry.npm.taobao.org/lower-case/download/lower-case-1.1.4.tgz?cache=0&sync_timestamp=1575601804567&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flower-case%2Fdownload%2Flower-case-1.1.4.tgz#9a2cabd1b9e8e0ae993a4bf7d5875c39c42e8eac"
   integrity sha1-miyr0bno4K6ZOkv31YdcOcQujqw=
 
+lozad@^1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/lozad/-/lozad-1.14.0.tgz#91d51d57e53187e95c5b7f4029d7a28a0e940e10"
+  integrity sha512-uMGxpXBW15JDGVly3p121Y4jlb/OwmXpnMQR5vnb4GxMeK45NGcmlMrRr47fmLxtSdnGRFm0YdJaVXuudPKDaA==
+
 lru-cache@^4.0.1, lru-cache@^4.1.2:
   version "4.1.5"
   resolved "https://registry.npm.taobao.org/lru-cache/download/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
@@ -6537,11 +6542,6 @@ relateurl@0.2.x:
   version "0.2.7"
   resolved "https://registry.npm.taobao.org/relateurl/download/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
-
-remove-markdown@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/remove-markdown/-/remove-markdown-0.3.0.tgz#5e4b667493a93579728f3d52ecc1db9ca505dc98"
-  integrity sha1-XktmdJOpNXlyjz1S7MHbnKUF3Jg=
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
