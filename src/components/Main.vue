@@ -15,7 +15,14 @@
                         <h5>{{ value.name }}</h5>
                     </div>
 
-                    <a :href="value.url" target="_blank" class="card__link"></a>
+                    <!--<a :href="value.url" target="_blank" class="card__link"></a>-->
+
+                    <div class="card__footer">
+                        <a v-for="(src, index) in value.sources" :key="index" :href="src[1]" :title="src[2]" target="_blank"
+                           class="card__source-link [ w-10 h-10 ]">
+                            <i :class="`fab fa-2x fa-${src[0]} [ text-gray-800 ]`"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,7 +105,7 @@
         @apply p-2 flex flex-col;
 
         &__container {
-            @apply relative bg-gray-100;
+            @apply h-full relative flex flex-col bg-gray-100;
         }
 
         &__image {
@@ -114,6 +121,14 @@
                 content: '';
                 @apply absolute inset-0 z-10;
             }
+        }
+
+        &__footer {
+            @apply mt-auto flex flex-wrap;
+        }
+
+        &__source-link {
+            @apply m-1 flex justify-center items-center;
         }
     }
 

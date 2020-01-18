@@ -18,4 +18,7 @@
     }
 </script>
 
-<style src="./assets/tailwind.css"></style>
+<style>
+    @import './assets/tailwind.css';
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css';
+</style>

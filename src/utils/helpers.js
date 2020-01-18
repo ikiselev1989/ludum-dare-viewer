@@ -1,4 +1,5 @@
 import {LD_SITE_PATH, LD_STATIC_PATH} from '../constants/path'
+import ICONS from '../constants/icons'
 
 export class Store {
     constructor() {
@@ -45,12 +46,22 @@ export function nodesFilter(nodes) {
     return nodes.map((item) => {
         let {id, name, meta, path, subsubtype} = item
         console.log(item)
+
+        let links = []
+
+        Object.keys(meta).map((key) => {
+            if (key.match(/^link-\d+$/)) {
+                links.push([[ICONS[meta[`${key}-tag`]]], meta[key], meta[`${key}-name`]])
+            }
+        })
+
         return {
             id,
             name,
             type: subsubtype,
             url: LD_SITE_PATH + path.replace('/^\//', ''),
-            cover: `${LD_STATIC_PATH}${meta.cover.replace('///', '')}.480x384.fit.jpg`
+            cover: `${LD_STATIC_PATH}${meta.cover.replace('///', '')}.480x384.fit.jpg`,
+            sources: links
         }
     })
 }
