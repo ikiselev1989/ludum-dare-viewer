@@ -45,13 +45,11 @@ export function feedFilter(feed) {
 export function nodesFilter(nodes) {
     return nodes.map((item) => {
         let {id, name, meta, path, subsubtype} = item
-        console.log(item)
-
         let links = []
 
         Object.keys(meta).map((key) => {
-            if (key.match(/^link-\d+$/)) {
-                links.push([[ICONS[meta[`${key}-tag`]]], meta[key], meta[`${key}-name`]])
+            if (key !== '' && key.match(/^link-\d+$/)) {
+                links.push([ICONS[meta[`${key}-tag`]], meta[key], meta[`${key}-name`]])
             }
         })
 

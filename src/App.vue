@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="[ bg-gray-400 ]">
+    <div id="app" class="[ flex flex-col min-h-screen bg-gray-400 ]">
         <Header/>
         <Main/>
     </div>

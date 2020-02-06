@@ -1,32 +1,37 @@
 <template>
     <section class="list [ container ]">
         <div class="list__container [ w-full ]">
+            <div v-if="this.$store.getters.list.length === 0" class="not-found [ m-auto ]">Games not found. Select
+                another event.
+            </div>
             <div class="card [ w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 ]"
                  v-for="value in this.$store.getters.list"
                  :key="value.id">
 
                 <div class="card__container">
-                    <div>
+                    <a :href="value.url" target="_blank">
                         <img :src="value.cover" :alt="value.name" class="card__image [ w-full h-64 sm:h-48 ]"/>
-                    </div>
+                    </a>
 
-                    <div class="card__text-container">
+                    <a :href="value.url" target="_blank" class="card__text-container">
                         <span :class="`event-type event-type--${value.type}`">{{ value.type }}</span>
                         <h5>{{ value.name }}</h5>
-                    </div>
+                    </a>
 
                     <!--<a :href="value.url" target="_blank" class="card__link"></a>-->
 
                     <div class="card__footer">
-                        <a v-for="(src, index) in value.sources" :key="index" :href="src[1]" :title="src[2]" target="_blank"
-                           class="card__source-link [ w-10 h-10 ]">
-                            <i :class="`fab fa-2x fa-${src[0]} [ text-gray-800 ]`"></i>
+                        <a v-if="src[0]"
+                           v-for="(src, index) in value.sources" :key="index" :href="src[1]" :title="src[2]"
+                           v-html="src[0]"
+                           target="_blank"
+                           class="card__source-link [ w-10 h-10 text-gray-800 ]">
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="pagination">
+        <div v-if="this.$store.getters.list.length > 0" class="pagination">
             <button v-if="paginationPrevAvailable" v-on:click="prev" class="btn btn--prev [ w-24 h12 mr-2 ]">
                 &lt;&lt; Prev
             </button>
@@ -133,6 +138,10 @@
     }
 
     .pagination {
-        @apply mt-8 flex justify-center;
+        @apply my-8 flex justify-center;
+    }
+
+    .not-found {
+        @apply text-2xl;
     }
 </style>
