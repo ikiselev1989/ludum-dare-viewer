@@ -1,11 +1,11 @@
 <template>
     <div class="header">
         <form @change="formChange">
-            <select v-model="currentEvent" name="event" id="event" class="header__selector">
+            <select v-model="currentEvent" name="event" title="event" id="event" class="header__selector">
                 <option v-for="event in events" :value="event">{{ `Ludum Dare #${event}` }}</option>
             </select>
 
-            <select v-model="currentType" name="type" id="type" class="header__selector">
+            <select v-model="currentType" name="type" title="type" id="type" class="header__selector">
                 <option class="text-right" v-for="type in types" :value="type">{{ type }}</option>
             </select>
         </form>
@@ -80,8 +80,13 @@
         @apply p-5 flex justify-center font-mono bg-gray-800;
 
         &__selector {
-            @apply px-3 py-1 appearance-none cursor-pointer shadow-inner rounded;
+            @apply px-3 py-1 appearance-none cursor-pointer shadow-inner rounded outline-none transition-colors duration-200;
             text-align-last: right;
+
+            &:hover,
+            &:active {
+                @apply bg-gray-200;
+            }
 
             & + & {
                 @apply ml-4;
