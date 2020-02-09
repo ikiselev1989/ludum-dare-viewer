@@ -1,4 +1,4 @@
-# ld-helper
+# Ludum Dare Viewer
 
 ## Project setup
 ```
