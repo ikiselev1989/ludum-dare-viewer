@@ -64,13 +64,17 @@ store.stateObjectImplement(LIST, {
 
         const {feed} = await  api.get(`${apiPath}node/feed/${store.getters[NODE_ID]}/grade-01-result+reverse+parent/item/game/${currentType}?offset=${offset}&limit=${limit}`)
 
+        let list = []
+
         if (feed.length > 0) {
             const feedIds = feedFilter(feed)
 
             const {node} = await api.get(apiPath + `node2/get/${feedIds.join('+')}`)
 
-            store.commit(LIST, nodesFilter(node))
+            list = nodesFilter(node)
         }
+
+        store.commit(LIST, list)
     }
 })
 
