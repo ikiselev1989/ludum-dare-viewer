@@ -66,8 +66,16 @@
             next() {
                 this.pagination(1)
             },
-            pagination(direction) {
-                return this.$store.dispatch(PAGE, (this.page + direction))
+            async pagination(direction) {
+                this.$root.$emit('visible-toggle', true)
+                await this.$store.dispatch(PAGE, (this.page + direction))
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                })
+
+                this.$root.$emit('visible-toggle', false)
             }
         }
     }
@@ -87,14 +95,24 @@
     }
 
     .btn {
-        @apply p-1 text-gray-100 font-mono rounded;
+        @apply p-1 text-gray-100 font-mono rounded outline-none transition-colors duration-100;
 
         &--prev {
             @apply bg-gray-600;
+
+            &:hover,
+            &:active {
+                @apply bg-gray-700;
+            }
         }
 
         &--next {
             @apply bg-orange-600;
+
+            &:hover,
+            &:active {
+                @apply bg-orange-700;
+            }
         }
     }
 

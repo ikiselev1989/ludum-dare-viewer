@@ -46,7 +46,7 @@ store.stateObjectImplement(PAGE, {
     value: 0,
     action: async (store, value) => {
         store.commit(PAGE, value)
-        store.dispatch(LIST)
+        await store.dispatch(LIST)
     }
 })
 

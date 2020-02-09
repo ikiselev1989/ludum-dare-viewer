@@ -55,8 +55,12 @@
                 this.events = events
             },
             async formChange() {
+                this.$root.$emit('visible-toggle', true)
+
                 await this.$store.dispatch(NODE_ID)
                 await this.$store.dispatch(LIST)
+
+                this.$root.$emit('visible-toggle', false)
             },
             async Init() {
                 await this.$store.dispatch(CURRENT_EVENT)
