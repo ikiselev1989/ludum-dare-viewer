@@ -45,7 +45,7 @@
             async setData() {
                 let events = []
 
-                for (let i = 0; i < 4; i++) {
+                for (let i = 0; i < 5; i++) {
                     const eventNumber = parseInt(this.currentEvent) - i
                     if (eventNumber > 0) {
                         events.push(eventNumber)
