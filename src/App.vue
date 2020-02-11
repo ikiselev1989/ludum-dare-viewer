@@ -3,6 +3,7 @@
         <Header/>
         <Main/>
         <Overlay/>
+        <LoginModal/>
     </div>
 </template>
 
@@ -10,13 +11,15 @@
     import Header from './components/Header.vue'
     import Main from './components/Main.vue'
     import Overlay from './components/Overlay'
+    import LoginModal from './components/LoginModal'
 
     export default {
         name: 'app',
         components: {
             Overlay,
             Header,
-            Main
+            Main,
+            LoginModal
         }
     }
 </script>
@@ -24,6 +27,13 @@
 <style lang="scss">
     @import './assets/tailwind.css';
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css');
+
+    @font-face {
+        font-family: LudumDairy;
+        src: url("./assets/Ludum-Dairy.ttf");
+        font-weight: 400;
+        font-style: normal;
+    }
 
     .fade-enter-active, .fade-leave-active {
         @apply transition-opacity duration-500;

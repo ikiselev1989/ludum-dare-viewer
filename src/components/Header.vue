@@ -1,14 +1,22 @@
 <template>
     <div class="header">
-        <form @change="formChange">
-            <select v-model="currentEvent" name="event" title="event" id="event" class="header__selector">
+        <div class="header__item logo">
+            <span v-for="word in ['Ludum','Dare','Viewer']" :key="word" :class="`logo__${word.toLowerCase()}`">{{ word }}</span>
+        </div>
+
+        <form @change="formChange" class="header__item filter-form">
+            <select v-model="currentEvent" name="event" title="event" id="event" class="filter-form__selector">
                 <option v-for="event in events" :value="event">{{ `Ludum Dare #${event}` }}</option>
             </select>
 
-            <select v-model="currentType" name="type" title="type" id="type" class="header__selector">
+            <select v-model="currentType" name="type" title="type" id="type" class="filter-form__selector">
                 <option class="text-right" v-for="type in types" :value="type">{{ type }}</option>
             </select>
         </form>
+
+        <div class="header__item login">
+            <a href="#" class="login__link" @click.prevent="loginModal">Login</a>
+        </div>
     </div>
 </template>
 
@@ -67,6 +75,9 @@
 
                 await this.formChange()
                 this.setData()
+            },
+            loginModal() {
+                this.$root.$emit('login-modal', true)
             }
         },
         mounted() {
@@ -77,8 +88,26 @@
 
 <style scoped lang="scss">
     .header {
-        @apply p-5 flex justify-center font-mono bg-gray-800;
+        @apply p-5 flex flex-col justify-between items-center font-mono bg-gray-800;
 
+        @screen md {
+            @apply flex-row;
+        }
+
+        &__item {
+            @apply mt-2;
+
+            @screen md {
+                @apply mt-0;
+            }
+
+            &:first-child {
+                @apply mt-0;
+            }
+        }
+    }
+
+    .filter-form {
         &__selector {
             @apply px-3 py-1 appearance-none cursor-pointer shadow-inner rounded outline-none transition-colors duration-200;
             text-align-last: right;
@@ -91,6 +120,35 @@
             & + & {
                 @apply ml-4;
             }
+        }
+    }
+
+    .logo {
+        @apply text-2xl;
+        font-family: LudumDairy, serif;
+
+        @screen md {
+            @apply text-3xl;
+        }
+
+        &__ludum {
+            @apply text-orange-600;
+        }
+
+        &__dare {
+            @apply text-orange-500;
+        }
+
+        &__viewer {
+            @apply text-white;
+        }
+    }
+
+    .login {
+        @apply text-white;
+
+        &__link {
+            @apply p-2;
         }
     }
 </style>
