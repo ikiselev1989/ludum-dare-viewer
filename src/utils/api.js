@@ -14,4 +14,9 @@ export default {
             .then((response) => Promise.resolve(response))
             .catch((error) => Promise.reject(error));
     },
+    request(options) {
+        return axios(options)
+            .then((response) => Promise.resolve(response))
+            .catch((error) => Promise.reject(error));
+    }
 }

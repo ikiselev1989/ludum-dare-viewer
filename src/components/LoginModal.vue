@@ -1,24 +1,33 @@
 <template>
     <transition name="fade">
         <div v-if="visible" class="login-modal [ w-full h-full ]">
-            <div class="login-modal__bg [ w-full h-full ]" @click="close"></div>
-            <form name="login-form" class="login-modal__form">
+            <div class="login-modal__bg [ w-full h-full ]"></div>
+            <form name="login-form" class="login-modal__form" @submit.prevent="submit">
                 <label for="login">Login</label>
-                <input id="login" type="text" title="login">
+                <input id="login" type="text" title="login" v-model="form.login">
                 <label for="password">Password</label>
-                <input id="password" type="password" title="password">
+                <input id="password" type="password" title="password" v-model="form.pw">
                 <button type="submit" class="submit">Login</button>
             </form>
+            <div class="login-modal__close" @click="close">
+                <i class="fas fa-2x fa-times"></i>
+            </div>
         </div>
     </transition>
 </template>
 
 <script>
+    import {USER} from '../constants/store'
+
     export default {
         name: "LoginModal",
         data() {
             return {
-                visible: false
+                visible: false,
+                form: {
+                    login: '',
+                    pw: ''
+                }
             }
         },
         methods: {
@@ -27,6 +36,9 @@
             },
             visibleToggle(value) {
                 return this.visible = value
+            },
+            async submit() {
+                await this.$store.dispatch(USER, this.form)
             }
         },
         mounted() {
@@ -65,6 +77,10 @@
                     @apply bg-gray-200;
                 }
             }
+        }
+
+        &__close {
+            @apply absolute top-0 right-0 mt-6 mr-6 text-white cursor-pointer;
         }
     }
 

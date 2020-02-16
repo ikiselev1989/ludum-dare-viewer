@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {NODE_ID, LIST, PAGE, CURRENT_EVENT, CURRENT_TYPE} from '../constants/store'
+import qs from 'qs'
+import {NODE_ID, LIST, PAGE, CURRENT_EVENT, CURRENT_TYPE, USER} from '../constants/store'
 import api from '../utils/api'
 import {feedFilter, nodesFilter, Store} from '../utils/helpers'
 
@@ -53,7 +54,6 @@ store.stateObjectImplement(PAGE, {
 // list
 store.stateObjectImplement(LIST, {
     value: [],
-    mutation: (state, payload) => state[LIST] = payload,
     action: async (store) => {
         const {state} = store
 
@@ -75,6 +75,21 @@ store.stateObjectImplement(LIST, {
         }
 
         store.commit(LIST, list)
+    }
+})
+
+store.stateObjectImplement(USER, {
+    value: null,
+    action: async (store, data) => {
+        const options = {
+            method: 'POST',
+            headers: {'content-type': 'application/x-www-form-urlencoded'},
+            data: qs.stringify(data),
+            url: `${apiPath}user/login/`,
+        };
+        let {id} = await api.request(options)
+
+        console.log(id)
     }
 })
 
