@@ -22,7 +22,7 @@
 
 <script>
     import {CURRENT_EVENT, CURRENT_TYPE, LIST, NODE_ID} from '../constants/store'
-    import {mapState} from 'vuex'
+    import {LOADING_TOGGLE, LOGIN_MODAL_TOGGLE} from '../constants/events'
 
     export default {
         data() {
@@ -63,12 +63,12 @@
                 this.events = events
             },
             async formChange() {
-                this.$root.$emit('visible-toggle', true)
+                this.$root.$emit(LOADING_TOGGLE, true)
 
                 await this.$store.dispatch(NODE_ID)
                 await this.$store.dispatch(LIST)
 
-                this.$root.$emit('visible-toggle', false)
+                this.$root.$emit(LOADING_TOGGLE, false)
             },
             async Init() {
                 await this.$store.dispatch(CURRENT_EVENT)
@@ -77,7 +77,7 @@
                 this.setData()
             },
             loginModal() {
-                this.$root.$emit('login-modal', true)
+                this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
             }
         },
         mounted() {

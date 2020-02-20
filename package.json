@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.19.1",
     "core-js": "^3.4.4",
+    "core-util-is": "^1.0.2",
     "tailwindcss": "^1.1.4",
     "vue": "^2.6.10",
     "vuex": "^3.1.2"
@@ -17,10 +18,10 @@
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-vuex": "^4.1.0",
     "@vue/cli-service": "^4.1.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
+    "qs": "latest",
     "sass-loader": "^8.0.0",
-    "vue-template-compiler": "^2.6.10",
-    "qs": "latest"
+    "vue-template-compiler": "^2.6.10"
   },
   "browserslist": [
     "> 1%",

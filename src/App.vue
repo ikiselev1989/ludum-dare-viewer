@@ -2,7 +2,7 @@
     <div id="app" class="[ flex flex-col min-h-screen bg-gray-400 ]">
         <Header/>
         <Main/>
-        <Overlay/>
+        <LoadingInfo/>
         <LoginModal/>
     </div>
 </template>
@@ -10,13 +10,13 @@
 <script>
     import Header from './components/Header.vue'
     import Main from './components/Main.vue'
-    import Overlay from './components/Overlay'
+    import LoadingInfo from './components/LoadingInfo'
     import LoginModal from './components/LoginModal'
 
     export default {
         name: 'app',
         components: {
-            Overlay,
+            LoadingInfo,
             Header,
             Main,
             LoginModal
