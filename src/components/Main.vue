@@ -54,7 +54,7 @@
                 list: LIST
             }),
             paginationNextAvailable() {
-                return this.list.length > 0
+                return this.list.length > 0 && this.list.length === 24
             },
             paginationPrevAvailable() {
                 return this.page > 0
