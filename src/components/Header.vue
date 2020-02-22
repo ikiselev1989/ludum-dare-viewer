@@ -15,7 +15,7 @@
         </form>
 
         <div class="header__item login">
-            <a href="#" class="login__link" @click.prevent="loginModal">Login</a>
+            <!--<a href="#" class="login__link" @click.prevent="loginModal">Login</a>-->
         </div>
     </div>
 </template>
