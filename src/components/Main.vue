@@ -44,6 +44,7 @@
 
 <script>
     import {LIST, PAGE} from '../constants/store'
+    import {LOADING_TOGGLE} from '../constants/events'
     import {mapGetters} from 'vuex'
 
     export default {
@@ -67,7 +68,7 @@
                 this.pagination(1)
             },
             async pagination(direction) {
-                this.$root.$emit('visible-toggle', true)
+                this.$root.$emit(LOADING_TOGGLE, true)
                 await this.$store.dispatch(PAGE, (this.page + direction))
 
                 window.scrollTo({
@@ -75,7 +76,7 @@
                     behavior: 'smooth'
                 })
 
-                this.$root.$emit('visible-toggle', false)
+                this.$root.$emit(LOADING_TOGGLE, false)
             }
         }
     }
