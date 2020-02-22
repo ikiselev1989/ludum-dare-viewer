@@ -11,8 +11,7 @@ export class Store {
             mutation = (state, payload) => state[name] = payload
 
         if (!action)
-            action = () => {
-            }
+            action = () => {}
 
         this.value = {
             ...this.value,

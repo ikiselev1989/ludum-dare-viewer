@@ -44,11 +44,22 @@
                 return this.visible = value
             },
             async submit() {
-                await this.$store.dispatch(USER, this.form)
+                try {
+                    await this.$store.dispatch(USER, this.form)
+                    this.close()
+                } catch (e) {
+
+                }
             }
         },
         mounted() {
             this.$root.$on(LOGIN_MODAL_TOGGLE, this.visibleToggle.bind(this))
+
+            try {
+                this.$store.dispatch(USER)
+            } catch (e) {
+
+            }
         }
     }
 </script>
