@@ -4,14 +4,29 @@
             <span v-for="word in ['Ludum','Dare','Viewer']" :key="word" :class="`logo__${word.toLowerCase()}`">{{ word }}</span>
         </div>
 
-        <form @change="formChange" class="header__item filter-form">
-            <select v-model="currentEvent" name="event" title="event" id="event" class="filter-form__selector">
+        <form class="header__item filter-form">
+            <select @change="formChange" v-model=" currentEvent" name="event" title="event" id="event"
+                    class="filter-form__selector">
                 <option v-for="event in events" :value="event">{{ `Ludum Dare #${event}` }}</option>
             </select>
 
-            <select v-model="currentType" name="type" title="type" id="type" class="filter-form__selector">
+            <select @change="formChange" v-model="currentType" name="type" title="type" id="type"
+                    class="filter-form__selector">
                 <option class="text-right" v-for="type in types" :value="type">{{ type }}</option>
             </select>
+
+            <input id="addition-filter" type="checkbox" class="filter-form__addition-filter-input"/>
+
+            <label for="addition-filter" class="filter-form__addition-filter">
+                <i class="loading__icon fas fa-cog"></i>
+            </label>
+
+            <div class="filter-form__additional-filter-list [ w-full ]">
+                <Checkbox id="html5" text="HTML5"></Checkbox>
+                <Checkbox id="win" text="Win"></Checkbox>
+                <Checkbox id="macos" text="MacOS"></Checkbox>
+                <Checkbox id="linux" text="Linux"></Checkbox>
+            </div>
         </form>
 
         <div class="header__item login">
@@ -23,6 +38,7 @@
 <script>
     import {CURRENT_EVENT, CURRENT_TYPE, LIST, NODE_ID} from '../constants/store'
     import {LOADING_TOGGLE, LOGIN_MODAL_TOGGLE} from '../constants/events'
+    import Checkbox from './partials/Checkbox'
 
     export default {
         data() {
@@ -30,6 +46,9 @@
                 events: [],
                 types: ['All', 'Compo', 'Jam'],
             }
+        },
+        components: {
+            Checkbox
         },
         computed: {
             currentEvent: {
@@ -76,9 +95,9 @@
                 await this.formChange()
                 this.setData()
             },
-            loginModal() {
-                this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
-            }
+            // loginModal() {
+            //     this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
+            // }
         },
         mounted() {
             this.Init()
@@ -88,7 +107,7 @@
 
 <style scoped lang="scss">
     .header {
-        @apply p-5 flex flex-col justify-between items-center font-mono bg-gray-800;
+        @apply p-5 flex flex-col justify-between items-center relative font-mono bg-gray-800;
 
         @screen md {
             @apply flex-row;
@@ -108,6 +127,36 @@
     }
 
     .filter-form {
+        $filter-form: &;
+
+        @apply flex items-center;
+
+        &__addition-filter-input {
+            @apply hidden;
+
+            &:checked {
+                & + #{$filter-form}__addition-filter {
+                    @apply text-orange-600;
+
+                    & + #{$filter-form}__additional-filter-list {
+                        @apply opacity-100;
+                    }
+                }
+            }
+        }
+
+        &__addition-filter {
+            @apply ml-6 text-white cursor-pointer transition-colors duration-200;
+        }
+
+        &__additional-filter-list {
+            @apply px-6 py-4;
+            @apply flex justify-center;
+            @apply absolute bottom-0 left-0;
+            @apply text-white bg-gray-800 border-t-2 border-white;
+            @apply transform translate-y-full opacity-0 transition-opacity duration-200;
+        }
+
         &__selector {
             @apply px-3 py-1 appearance-none cursor-pointer shadow-inner rounded outline-none transition-colors duration-200;
             text-align-last: right;
