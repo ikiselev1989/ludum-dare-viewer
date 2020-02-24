@@ -107,7 +107,7 @@
 
 <style scoped lang="scss">
     .header {
-        @apply p-5 flex flex-col justify-between items-center relative font-mono bg-gray-800;
+        @apply p-5 flex flex-col justify-between items-center relative font-mono bg-gray-800 z-30;
 
         @screen md {
             @apply flex-row;
