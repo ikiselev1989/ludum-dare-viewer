@@ -1,6 +1,6 @@
 <template>
     <label :for="id" class="checkbox">
-        <input class="checkbox__input" type="checkbox" :id="id">
+        <input class="checkbox__input" type="checkbox" :id="id" v-model="checked" :value="id" @change="onChange">
         <span class="checkbox__mark [ w-4 h-4 ]">
             <i class="fas fa-check | checkbox__check"></i>
         </span>
@@ -11,7 +11,27 @@
 <script>
     export default {
         name: "Checkbox",
-        props: ['id', 'text']
+        props: ['id', 'text', 'value'],
+        data() {
+            return {
+                checkedProxy: false
+            }
+        },
+        computed: {
+            checked: {
+                get() {
+                    return this.value
+                },
+                set(val) {
+                    this.checkedProxy = val
+                }
+            }
+        },
+        methods: {
+            onChange: function (e) {
+                this.$emit('input', this.checkedProxy)
+            }
+        }
     }
 </script>
 

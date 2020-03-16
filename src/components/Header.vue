@@ -4,28 +4,26 @@
             <span v-for="word in ['Ludum','Dare','Viewer']" :key="word" :class="`logo__${word.toLowerCase()}`">{{ word }}</span>
         </div>
 
-        <form class="header__item filter-form">
-            <select @change="formChange" v-model=" currentEvent" name="event" title="event" id="event"
+        <form class="header__item filter-form" @change.prevent="formChange">
+            <select v-model="currentEvent" name="event" title="event" id="event"
                     class="filter-form__selector">
                 <option v-for="event in events" :value="event">{{ `Ludum Dare #${event}` }}</option>
             </select>
 
-            <select @change="formChange" v-model="currentType" name="type" title="type" id="type"
+            <select v-model="currentType" name="type" title="type" id="type"
                     class="filter-form__selector">
                 <option class="text-right" v-for="type in types" :value="type">{{ type }}</option>
             </select>
 
-            <input id="addition-filter" type="checkbox" class="filter-form__addition-filter-input"/>
-
-            <label for="addition-filter" class="filter-form__addition-filter">
+            <div :class="['filter-form__addition-filter', filterActive ? 'active' : '']" @click="filterToggle">
                 <i class="loading__icon fas fa-cog"></i>
-            </label>
+            </div>
 
             <div class="filter-form__additional-filter-list [ w-full ]">
-                <Checkbox id="html5" text="HTML5"></Checkbox>
-                <Checkbox id="win" text="Win"></Checkbox>
-                <Checkbox id="macos" text="MacOS"></Checkbox>
-                <Checkbox id="linux" text="Linux"></Checkbox>
+                <Checkbox id="html5" text="HTML5" v-model="platforms"></Checkbox>
+                <Checkbox id="win" text="Win" v-model="platforms"></Checkbox>
+                <Checkbox id="macos" text="MacOS" v-model="platforms"></Checkbox>
+                <Checkbox id="linux" text="Linux" v-model="platforms"></Checkbox>
             </div>
         </form>
 
@@ -36,8 +34,8 @@
 </template>
 
 <script>
-    import {CURRENT_EVENT, CURRENT_TYPE, LIST, NODE_ID} from '../constants/store'
-    import {LOADING_TOGGLE, LOGIN_MODAL_TOGGLE} from '../constants/events'
+    import {CURRENT_EVENT, CURRENT_TYPE, LIST, NODE_ID, PLATFORMS} from '../constants/store'
+    import {LOADING_TOGGLE} from '../constants/events'
     import Checkbox from './partials/Checkbox'
 
     export default {
@@ -45,6 +43,7 @@
             return {
                 events: [],
                 types: ['All', 'Compo', 'Jam'],
+                filterActive: false
             }
         },
         components: {
@@ -65,6 +64,14 @@
                 },
                 set(value) {
                     this.$store.commit(CURRENT_TYPE, value)
+                }
+            },
+            platforms: {
+                get() {
+                    return this.$store.getters[PLATFORMS]
+                },
+                set(value) {
+                    this.$store.commit(PLATFORMS, value)
                 }
             }
         },
@@ -95,6 +102,9 @@
                 await this.formChange()
                 this.setData()
             },
+            filterToggle() {
+                this.filterActive = !this.filterActive
+            }
             // loginModal() {
             //     this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
             // }
@@ -131,22 +141,16 @@
 
         @apply flex items-center;
 
-        &__addition-filter-input {
-            @apply hidden;
-
-            &:checked {
-                & + #{$filter-form}__addition-filter {
-                    @apply text-orange-600;
-
-                    & + #{$filter-form}__additional-filter-list {
-                        @apply opacity-100;
-                    }
-                }
-            }
-        }
-
         &__addition-filter {
             @apply ml-6 text-white cursor-pointer transition-colors duration-200;
+
+            &.active {
+                @apply text-orange-600;
+
+                & + #{$filter-form}__additional-filter-list {
+                    @apply opacity-100;
+                }
+            }
         }
 
         &__additional-filter-list {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {NODE_ID, LIST, PAGE, CURRENT_EVENT, CURRENT_TYPE, USER} from '../constants/store'
+import {NODE_ID, LIST, PAGE, CURRENT_EVENT, CURRENT_TYPE, USER, PLATFORMS} from '../constants/store'
 import {API_PATH} from '../constants/path'
 import api from '../utils/api'
 import {feedFilter, nodesFilter, Store} from '../utils/helpers'
@@ -72,7 +72,7 @@ store.stateObjectImplement(LIST, {
 
             const {node} = await api.get(API_PATH + `node2/get/${feedIds.join('+')}`)
 
-            list = nodesFilter(node)
+            list = nodesFilter(node, store.getters[PLATFORMS])
         }
 
         store.commit(LIST, list)
@@ -110,6 +110,10 @@ store.stateObjectImplement(USER, {
 
         store.commit(USER, id)
     }
+})
+
+store.stateObjectImplement(PLATFORMS, {
+    value: []
 })
 
 export default new Vuex.Store(store.value)
