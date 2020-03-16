@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {NODE_ID, LIST, PAGE, CURRENT_EVENT, CURRENT_TYPE, USER, PLATFORMS} from '../constants/store'
+import {NODE_ID, LIST, PAGE_NUMBER, CURRENT_EVENT, CURRENT_TYPE, USER, PLATFORMS} from '../constants/store'
 import {API_PATH} from '../constants/path'
 import api from '../utils/api'
 import {feedFilter, nodesFilter, Store} from '../utils/helpers'
@@ -43,11 +43,11 @@ store.stateObjectImplement(NODE_ID, {
     }
 })
 
-// page
-store.stateObjectImplement(PAGE, {
+// page number
+store.stateObjectImplement(PAGE_NUMBER, {
     value: 0,
     action: async (store, value) => {
-        store.commit(PAGE, value)
+        store.commit(PAGE_NUMBER, value)
         await store.dispatch(LIST)
     }
 })
@@ -58,7 +58,7 @@ store.stateObjectImplement(LIST, {
     action: async (store) => {
         const {state} = store
 
-        const offset = 24 * state[PAGE]
+        const offset = 24 * state[PAGE_NUMBER]
         const limit = 24
 
         let currentType = (store.getters[CURRENT_TYPE].toLowerCase()) === 'all' ? 'compo+jam' : store.getters[CURRENT_TYPE]

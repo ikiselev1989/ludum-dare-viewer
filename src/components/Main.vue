@@ -43,14 +43,14 @@
 </template>
 
 <script>
-    import {LIST, PAGE} from '../constants/store'
+    import {LIST, PAGE_NUMBER} from '../constants/store'
     import {LOADING_TOGGLE} from '../constants/events'
     import {mapGetters} from 'vuex'
 
     export default {
         computed: {
             ...mapGetters({
-                page: PAGE,
+                page: PAGE_NUMBER,
                 list: LIST
             }),
             paginationNextAvailable() {
@@ -69,7 +69,7 @@
             },
             async pagination(direction) {
                 this.$root.$emit(LOADING_TOGGLE, true)
-                await this.$store.dispatch(PAGE, (this.page + direction))
+                await this.$store.dispatch(PAGE_NUMBER, (this.page + direction))
 
                 window.scrollTo({
                     top: 0,
