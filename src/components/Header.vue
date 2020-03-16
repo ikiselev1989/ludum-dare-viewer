@@ -19,6 +19,7 @@
 
             <label for="addition-filter" class="filter-form__addition-filter">
                 <i class="loading__icon fas fa-cog"></i>
+                <span>{{ platforms.length > 0 ? platforms.length : '' }}</span>
             </label>
 
             <div class="filter-form__additional-filter-list [ w-full ]">
