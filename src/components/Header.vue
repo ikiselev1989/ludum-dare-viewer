@@ -4,26 +4,28 @@
             <span v-for="word in ['Ludum','Dare','Viewer']" :key="word" :class="`logo__${word.toLowerCase()}`">{{ word }}</span>
         </div>
 
-        <form class="header__item filter-form" @change.prevent="formChange">
+        <form class="header__item filter-form">
             <select v-model="currentEvent" name="event" title="event" id="event"
-                    class="filter-form__selector">
+                    class="filter-form__selector" @change="eventChange">
                 <option v-for="event in events" :value="event">{{ `Ludum Dare #${event}` }}</option>
             </select>
 
             <select v-model="currentType" name="type" title="type" id="type"
-                    class="filter-form__selector">
+                    class="filter-form__selector" @change="eventTypeChange">
                 <option class="text-right" v-for="type in types" :value="type">{{ type }}</option>
             </select>
 
-            <div :class="['filter-form__addition-filter', filterActive ? 'active' : '']" @click="filterToggle">
+            <input id="addition-filter" type="checkbox" class="filter-form__addition-filter-input"/>
+
+            <label for="addition-filter" class="filter-form__addition-filter">
                 <i class="loading__icon fas fa-cog"></i>
-            </div>
+            </label>
 
             <div class="filter-form__additional-filter-list [ w-full ]">
-                <Checkbox id="html5" text="HTML5" v-model="platforms"></Checkbox>
-                <Checkbox id="win" text="Win" v-model="platforms"></Checkbox>
-                <Checkbox id="macos" text="MacOS" v-model="platforms"></Checkbox>
-                <Checkbox id="linux" text="Linux" v-model="platforms"></Checkbox>
+                <Checkbox id="html5" text="HTML5" v-model="platforms" @change="filterChange"></Checkbox>
+                <Checkbox id="win" text="Win" v-model="platforms" @change="filterChange"></Checkbox>
+                <Checkbox id="macos" text="MacOS" v-model="platforms" @change="filterChange"></Checkbox>
+                <Checkbox id="linux" text="Linux" v-model="platforms" @change="filterChange"></Checkbox>
             </div>
         </form>
 
@@ -34,7 +36,7 @@
 </template>
 
 <script>
-    import {CURRENT_EVENT, CURRENT_TYPE, LIST, NODE_ID, PLATFORMS} from '../constants/store'
+    import {CURRENT_EVENT, CURRENT_TYPE, FILTERED_LIST, LIST, NODE_ID, PAGE, PLATFORMS} from '../constants/store'
     import {LOADING_TOGGLE} from '../constants/events'
     import Checkbox from './partials/Checkbox'
 
@@ -88,23 +90,50 @@
 
                 this.events = events
             },
-            async formChange() {
+            async eventChange() {
+                this.loadingToggleAnimation(async () => {
+                    await this.nodeIdUpdate()
+                    await this.listUpdate()
+                    await this.filteredListUpdate()
+                    await this.pageUpdate()
+                })
+            },
+            async eventTypeChange() {
+                this.loadingToggleAnimation(async () => {
+                    await this.listUpdate()
+                    await this.filteredListUpdate()
+                    await this.pageUpdate()
+                })
+            },
+            async filterChange() {
+                await this.filteredListUpdate()
+                await this.pageUpdate()
+            },
+            async loadingToggleAnimation(action) {
                 this.$root.$emit(LOADING_TOGGLE, true)
 
-                await this.$store.dispatch(NODE_ID)
-                await this.$store.dispatch(LIST)
+                await action()
 
                 this.$root.$emit(LOADING_TOGGLE, false)
             },
             async Init() {
                 await this.$store.dispatch(CURRENT_EVENT)
 
-                await this.formChange()
+                await this.eventChange()
                 this.setData()
             },
-            filterToggle() {
-                this.filterActive = !this.filterActive
-            }
+            async nodeIdUpdate() {
+                await this.$store.dispatch(NODE_ID)
+            },
+            async listUpdate() {
+                await this.$store.dispatch(LIST)
+            },
+            async filteredListUpdate() {
+                await this.$store.dispatch(FILTERED_LIST)
+            },
+            async pageUpdate() {
+                await this.$store.dispatch(PAGE)
+            },
             // loginModal() {
             //     this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
             // }
@@ -141,16 +170,22 @@
 
         @apply flex items-center;
 
-        &__addition-filter {
-            @apply ml-6 text-white cursor-pointer transition-colors duration-200;
+        &__addition-filter-input {
+            @apply hidden;
 
-            &.active {
-                @apply text-orange-600;
+            &:checked {
+                & + #{$filter-form}__addition-filter {
+                    @apply text-orange-600;
 
-                & + #{$filter-form}__additional-filter-list {
-                    @apply opacity-100;
+                    & + #{$filter-form}__additional-filter-list {
+                        @apply opacity-100;
+                    }
                 }
             }
+        }
+
+        &__addition-filter {
+            @apply ml-6 text-white cursor-pointer transition-colors duration-200;
         }
 
         &__additional-filter-list {

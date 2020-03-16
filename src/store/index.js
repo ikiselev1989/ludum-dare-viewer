@@ -1,9 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {NODE_ID, LIST, PAGE_NUMBER, CURRENT_EVENT, CURRENT_TYPE, USER, PLATFORMS} from '../constants/store'
+import {
+    NODE_ID,
+    LIST,
+    PAGE_NUMBER,
+    CURRENT_EVENT,
+    CURRENT_TYPE,
+    USER,
+    PLATFORMS,
+    PAGE,
+    ITEM_LIMIT, MAX_NODES, FILTERED_LIST
+} from '../constants/store'
 import {API_PATH} from '../constants/path'
 import api from '../utils/api'
-import {feedFilter, nodesFilter, Store} from '../utils/helpers'
+import {asyncForEach, chunkArray, feedFilter, nodesFieldsFilter, nodesPlatromsFilter, Store} from '../utils/helpers'
 import qs from 'qs'
 
 Vue.use(Vuex)
@@ -45,10 +55,25 @@ store.stateObjectImplement(NODE_ID, {
 
 // page number
 store.stateObjectImplement(PAGE_NUMBER, {
-    value: 0,
-    action: async (store, value) => {
-        store.commit(PAGE_NUMBER, value)
-        await store.dispatch(LIST)
+    value: 0
+})
+
+store.stateObjectImplement(PAGE, {
+    value: [],
+    action: async (store) => {
+        const {state} = store
+
+        const feeds = state[FILTERED_LIST]
+
+        const pages = chunkArray(feeds, ITEM_LIMIT)
+
+        if (!pages[state[PAGE_NUMBER]]) {
+            let page = (pages.length - 1) > 0 ? pages.length - 1 : 0
+
+            store.commit(PAGE_NUMBER, page)
+        }
+
+        store.commit(PAGE, pages.length > 0 ? pages[state[PAGE_NUMBER]] : [])
     }
 })
 
@@ -56,26 +81,55 @@ store.stateObjectImplement(PAGE_NUMBER, {
 store.stateObjectImplement(LIST, {
     value: [],
     action: async (store) => {
-        const {state} = store
-
-        const offset = 24 * state[PAGE_NUMBER]
-        const limit = 24
-
         let currentType = (store.getters[CURRENT_TYPE].toLowerCase()) === 'all' ? 'compo+jam' : store.getters[CURRENT_TYPE]
-
-        const {feed} = await  api.get(`${API_PATH}node/feed/${store.getters[NODE_ID]}/grade-01-result+reverse+parent/item/game/${currentType}?offset=${offset}&limit=${limit}`)
-
         let list = []
 
-        if (feed.length > 0) {
-            const feedIds = feedFilter(feed)
+        let page = 0
 
-            const {node} = await api.get(API_PATH + `node2/get/${feedIds.join('+')}`)
+        const loop = async () => {
+            const {feed} = await api.get(`${API_PATH}node/feed/${store.getters[NODE_ID]}/grade-01-result+reverse+parent/item/game/${currentType}/?limit=50&offset=${page * 50}`)
 
-            list = nodesFilter(node, store.getters[PLATFORMS])
+            if (feed && feed.length > 0) {
+                const feedIds = feedFilter(feed)
+
+                list = [...list, ...feedIds]
+
+                page++
+
+                if (feed.length === 50) {
+                    await loop()
+                }
+            }
         }
 
-        store.commit(LIST, list)
+        await loop()
+
+        let nodes = []
+        const promises = []
+
+        if (list && list.length > 0) {
+            let feedsChunks = chunkArray(list, MAX_NODES)
+
+            await asyncForEach(feedsChunks, async (feeds) => {
+                promises.push(new Promise(async (resolve) => {
+                    const {node} = await api.get(API_PATH + `node2/get/${feeds.join('+')}`)
+                    nodes = nodes.concat(nodesFieldsFilter(node))
+
+                    resolve()
+                }))
+            })
+        }
+
+        await Promise.all(promises).then(() => {
+            store.commit(LIST, nodes)
+        })
+    }
+})
+
+store.stateObjectImplement(FILTERED_LIST, {
+    value: [],
+    action: (store) => {
+        store.commit(FILTERED_LIST, nodesPlatromsFilter(store.getters[LIST], store.getters[PLATFORMS]))
     }
 })
 

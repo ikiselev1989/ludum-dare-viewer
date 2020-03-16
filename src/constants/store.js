@@ -1,7 +1,11 @@
 export const NODE_ID = 'node_id'
 export const LIST = 'list'
 export const PAGE_NUMBER = 'page_number'
+export const PAGE = 'page'
+export const FILTERED_LIST = 'filtered_list'
 export const CURRENT_EVENT = 'current_event'
 export const CURRENT_TYPE = 'current_type'
-export  const  USER = 'user'
-export  const  PLATFORMS = 'platforms'
+export const USER = 'user'
+export const PLATFORMS = 'platforms'
+export const ITEM_LIMIT = 24
+export const MAX_NODES = 250

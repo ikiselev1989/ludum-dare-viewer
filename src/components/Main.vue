@@ -1,11 +1,11 @@
 <template>
     <section class="list [ container ]">
         <div class="list__container [ w-full ]">
-            <div v-if="this.$store.getters.list.length === 0" class="not-found [ m-auto ]">Games not found. Select
+            <div v-if="this.$store.getters.page.length === 0" class="not-found [ m-auto ]">Games not found. Select
                 another event.
             </div>
             <div class="card [ w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 ]"
-                 v-for="value in this.$store.getters.list"
+                 v-for="value in this.$store.getters.page"
                  :key="value.id">
 
                 <div class="card__container">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="this.$store.getters.list.length > 0" class="pagination">
+        <div v-if="this.$store.getters.page.length > 0" class="pagination">
             <button v-if="paginationPrevAvailable" v-on:click="prev" class="btn btn--prev [ w-24 h12 mr-2 ]">
                 &lt;&lt; Prev
             </button>
@@ -43,21 +43,21 @@
 </template>
 
 <script>
-    import {LIST, PAGE_NUMBER} from '../constants/store'
-    import {LOADING_TOGGLE} from '../constants/events'
+    import {FILTERED_LIST, ITEM_LIMIT, PAGE, PAGE_NUMBER} from '../constants/store'
     import {mapGetters} from 'vuex'
 
     export default {
         computed: {
             ...mapGetters({
-                page: PAGE_NUMBER,
-                list: LIST
+                pageNumber: PAGE_NUMBER,
+                page: PAGE,
+                filteredList: FILTERED_LIST,
             }),
             paginationNextAvailable() {
-                return this.list.length > 0 && this.list.length === 24
+                return Math.floor(this.filteredList.length / ITEM_LIMIT) > this.pageNumber
             },
             paginationPrevAvailable() {
-                return this.page > 0
+                return this.pageNumber > 0
             }
         },
         methods: {
@@ -68,15 +68,13 @@
                 this.pagination(1)
             },
             async pagination(direction) {
-                this.$root.$emit(LOADING_TOGGLE, true)
-                await this.$store.dispatch(PAGE_NUMBER, (this.page + direction))
+                this.$store.commit(PAGE_NUMBER, (this.pageNumber + direction))
+                await this.$store.dispatch(PAGE)
 
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 })
-
-                this.$root.$emit(LOADING_TOGGLE, false)
             }
         }
     }

@@ -42,8 +42,8 @@ export function feedFilter(feed) {
     })
 }
 
-export function nodesFilter(nodes, platforms) {
-    const filteredNodes = nodes.map((item) => {
+export function nodesFieldsFilter(nodes) {
+    return nodes.map((item) => {
         let {id, name, meta, path, subsubtype} = item
         let links = []
 
@@ -62,8 +62,10 @@ export function nodesFilter(nodes, platforms) {
             sources: links
         }
     })
+}
 
-    return filteredNodes.filter((node) => {
+export function nodesPlatromsFilter(nodes, platforms = []) {
+    return nodes.filter((node) => {
         if (platforms.length > 0) {
             const filteredLinks = node.sources.filter((item) => {
                 return platforms.indexOf(item[3]) !== -1;
@@ -76,4 +78,16 @@ export function nodesFilter(nodes, platforms) {
 
         return node;
     })
+}
+
+export function chunkArray(arr, size) {
+    return Array.from({length: Math.ceil(arr.length / size)}, (v, i) =>
+        arr.slice(i * size, i * size + size)
+    )
+}
+
+export async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
 }

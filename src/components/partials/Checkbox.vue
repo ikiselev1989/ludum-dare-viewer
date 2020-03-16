@@ -30,6 +30,7 @@
         methods: {
             onChange: function (e) {
                 this.$emit('input', this.checkedProxy)
+                this.$emit('change')
             }
         }
     }
