@@ -18,8 +18,6 @@
                         <h5>{{ value.name }}</h5>
                     </a>
 
-                    <!--<a :href="value.url" target="_blank" class="card__link"></a>-->
-
                     <div class="card__footer">
                         <a v-if="src[0]"
                            v-for="(src, index) in value.sources" :key="index" :href="src[1]" :title="src[2]"

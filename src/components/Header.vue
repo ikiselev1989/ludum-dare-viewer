@@ -17,7 +17,7 @@
 
             <input id="addition-filter" type="checkbox" class="filter-form__addition-filter-input"/>
 
-            <label for="addition-filter" class="filter-form__addition-filter">
+            <label for="addition-filter" title="platform filter" class="filter-form__addition-filter">
                 <i class="loading__icon fas fa-cog"></i>
                 <span>{{ platforms.length > 0 ? platforms.length : '' }}</span>
             </label>
@@ -30,8 +30,13 @@
             </div>
         </form>
 
-        <div class="header__item login">
+        <!--<div class="header__item login">-->
             <!--<a href="#" class="login__link" @click.prevent="loginModal">Login</a>-->
+        <!--</div>-->
+
+        <div class="header__item about">
+            <a class="about__link" href="#" @click.prevent="aboutModal">About</a>
+            <i class="fas fa-info-circle"></i>
         </div>
     </div>
 </template>
@@ -47,7 +52,7 @@
         PAGE_NUMBER,
         PLATFORMS
     } from '../constants/store'
-    import {LOADING_TOGGLE} from '../constants/events'
+    import {ABOUT_MODAL_TOGGLE, LOADING_TOGGLE} from '../constants/events'
     import Checkbox from './partials/Checkbox'
 
     export default {
@@ -141,6 +146,9 @@
             },
             resetPageNumber() {
                 this.$store.commit(PAGE_NUMBER, 0)
+            },
+            aboutModal() {
+                this.$root.$emit(ABOUT_MODAL_TOGGLE, true)
             }
             // loginModal() {
             //     this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
@@ -241,6 +249,14 @@
     }
 
     .login {
+        @apply text-white;
+
+        &__link {
+            @apply p-2;
+        }
+    }
+
+    .about {
         @apply text-white;
 
         &__link {

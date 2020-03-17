@@ -3,7 +3,8 @@
         <Header/>
         <Main/>
         <LoadingInfo/>
-        <LoginModal/>
+        <AboutModal/>
+        <!--<LoginModal/>-->
     </div>
 </template>
 
@@ -11,7 +12,8 @@
     import Header from './components/Header.vue'
     import Main from './components/Main.vue'
     import LoadingInfo from './components/LoadingInfo'
-    import LoginModal from './components/LoginModal'
+    import AboutModal from './components/AboutModal'
+    // import LoginModal from './components/LoginModal'
 
     export default {
         name: 'app',
@@ -19,7 +21,8 @@
             LoadingInfo,
             Header,
             Main,
-            LoginModal
+            AboutModal,
+            // LoginModal,
         }
     }
 </script>

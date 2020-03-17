@@ -15,7 +15,7 @@
 
 <style scoped lang="scss">
     .overlay {
-        @apply fixed;
+        @apply fixed z-50;
 
         &__bg {
             @apply bg-gray-900;
