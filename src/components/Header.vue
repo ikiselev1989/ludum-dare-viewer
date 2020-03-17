@@ -258,7 +258,12 @@
     }
 
     .about {
+        @apply mt-6;
         @apply text-white;
+
+        @screen md {
+            @apply mt-0;
+        }
 
         &__link {
             @apply p-2;

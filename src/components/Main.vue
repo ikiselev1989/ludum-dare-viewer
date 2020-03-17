@@ -185,6 +185,7 @@
     }
 
     .not-found {
+        @apply p-4;
         @apply text-2xl;
     }
 </style>

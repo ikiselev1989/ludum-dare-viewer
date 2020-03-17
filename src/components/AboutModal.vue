@@ -50,6 +50,7 @@
 
 <style scoped lang="scss">
     .about-modal {
+        @apply p-4;
         @apply text-white;
 
         h3 {
