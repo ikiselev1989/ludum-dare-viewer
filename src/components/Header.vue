@@ -37,7 +37,16 @@
 </template>
 
 <script>
-    import {CURRENT_EVENT, CURRENT_TYPE, FILTERED_LIST, LIST, NODE_ID, PAGE, PLATFORMS} from '../constants/store'
+    import {
+        CURRENT_EVENT,
+        CURRENT_TYPE,
+        FILTERED_LIST,
+        LIST,
+        NODE_ID,
+        PAGE,
+        PAGE_NUMBER,
+        PLATFORMS
+    } from '../constants/store'
     import {LOADING_TOGGLE} from '../constants/events'
     import Checkbox from './partials/Checkbox'
 
@@ -93,6 +102,7 @@
             },
             async eventChange() {
                 this.loadingToggleAnimation(async () => {
+                    this.resetPageNumber()
                     await this.nodeIdUpdate()
                     await this.listUpdate()
                     await this.filteredListUpdate()
@@ -100,6 +110,7 @@
                 })
             },
             async filterChange() {
+                this.resetPageNumber()
                 await this.filteredListUpdate()
                 await this.pageUpdate()
             },
@@ -128,6 +139,9 @@
             async pageUpdate() {
                 await this.$store.dispatch(PAGE)
             },
+            resetPageNumber() {
+                this.$store.commit(PAGE_NUMBER, 0)
+            }
             // loginModal() {
             //     this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
             // }
