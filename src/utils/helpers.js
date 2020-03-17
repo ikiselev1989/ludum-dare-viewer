@@ -58,7 +58,7 @@ export function nodesFieldsFilter(nodes) {
             name,
             type: subsubtype,
             url: LD_SITE_PATH + path.replace('/^\//', ''),
-            cover: meta.cover ? `${LD_STATIC_PATH}${meta.cover.replace('///', '')}.480x384.fit.jpg` : '/no-image.jpeg',
+            cover: meta.cover ? `${LD_STATIC_PATH}${meta.cover.replace('///', '')}.480x384.fit.jpg` : process.env.BASE_URL + 'no-image.jpeg',
             sources: links
         }
     })

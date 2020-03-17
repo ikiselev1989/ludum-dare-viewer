@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <a class="header__item logo" href="/">
+        <a class="header__item logo" :href="rootPath">
             <span v-for="word in ['Ludum','Dare','Viewer']" :key="word" :class="`logo__${word.toLowerCase()}`">{{ word }}</span>
         </a>
 
@@ -58,6 +58,7 @@
     export default {
         data() {
             return {
+                rootPath: process.env.BASE_URL,
                 events: [],
                 types: ['All', 'Compo', 'Jam'],
                 filterActive: false
