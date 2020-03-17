@@ -11,7 +11,7 @@
             </select>
 
             <select v-model="currentType" name="type" title="type" id="type"
-                    class="filter-form__selector" @change="eventTypeChange">
+                    class="filter-form__selector" @change="filterChange">
                 <option class="text-right" v-for="type in types" :value="type">{{ type }}</option>
             </select>
 
@@ -94,13 +94,6 @@
             async eventChange() {
                 this.loadingToggleAnimation(async () => {
                     await this.nodeIdUpdate()
-                    await this.listUpdate()
-                    await this.filteredListUpdate()
-                    await this.pageUpdate()
-                })
-            },
-            async eventTypeChange() {
-                this.loadingToggleAnimation(async () => {
                     await this.listUpdate()
                     await this.filteredListUpdate()
                     await this.pageUpdate()

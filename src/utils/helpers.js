@@ -64,19 +64,31 @@ export function nodesFieldsFilter(nodes) {
     })
 }
 
-export function nodesPlatromsFilter(nodes, platforms = []) {
+export function nodesPlatformsFilter(nodes, platforms = []) {
     return nodes.filter((node) => {
         if (platforms.length > 0) {
             const filteredLinks = node.sources.filter((item) => {
-                return platforms.indexOf(item[3]) !== -1;
+                return platforms.indexOf(item[3]) !== -1
             })
 
             if (filteredLinks.length === 0) {
-                return false;
+                return false
             }
         }
 
-        return node;
+        return true
+    })
+}
+
+export function nodesEventTypeFilter(nodes, type = 'all') {
+    type = type.toLowerCase()
+
+    if (type === 'all') {
+        return nodes
+    }
+
+    return nodes.filter((node) => {
+        return node.type === type
     })
 }
 

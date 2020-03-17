@@ -13,7 +13,15 @@ import {
 } from '../constants/store'
 import {API_PATH} from '../constants/path'
 import api from '../utils/api'
-import {asyncForEach, chunkArray, feedFilter, nodesFieldsFilter, nodesPlatromsFilter, Store} from '../utils/helpers'
+import {
+    asyncForEach,
+    chunkArray,
+    feedFilter,
+    nodesEventTypeFilter,
+    nodesFieldsFilter,
+    nodesPlatformsFilter,
+    Store
+} from '../utils/helpers'
 import qs from 'qs'
 
 Vue.use(Vuex)
@@ -81,13 +89,12 @@ store.stateObjectImplement(PAGE, {
 store.stateObjectImplement(LIST, {
     value: [],
     action: async (store) => {
-        let currentType = (store.getters[CURRENT_TYPE].toLowerCase()) === 'all' ? 'compo+jam' : store.getters[CURRENT_TYPE]
         let list = []
 
         let page = 0
 
         const loop = async () => {
-            const {feed} = await api.get(`${API_PATH}node/feed/${store.getters[NODE_ID]}/grade-01-result+reverse+parent/item/game/${currentType}/?limit=50&offset=${page * 50}`)
+            const {feed} = await api.get(`${API_PATH}node/feed/${store.getters[NODE_ID]}/grade-01-result+reverse+parent/item/game/compo+jam/?limit=50&offset=${page * 50}`)
 
             if (feed && feed.length > 0) {
                 const feedIds = feedFilter(feed)
@@ -129,7 +136,10 @@ store.stateObjectImplement(LIST, {
 store.stateObjectImplement(FILTERED_LIST, {
     value: [],
     action: (store) => {
-        store.commit(FILTERED_LIST, nodesPlatromsFilter(store.getters[LIST], store.getters[PLATFORMS]))
+        let filtered_list = nodesPlatformsFilter(store.getters[LIST], store.getters[PLATFORMS])
+        filtered_list = nodesEventTypeFilter(filtered_list, store.getters[CURRENT_TYPE])
+
+        store.commit(FILTERED_LIST, filtered_list)
     }
 })
 
