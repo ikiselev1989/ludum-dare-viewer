@@ -1,8 +1,8 @@
 <template>
     <div class="header">
-        <div class="header__item logo">
+        <a class="header__item logo" href="/">
             <span v-for="word in ['Ludum','Dare','Viewer']" :key="word" :class="`logo__${word.toLowerCase()}`">{{ word }}</span>
-        </div>
+        </a>
 
         <form class="header__item filter-form">
             <select v-model="currentEvent" name="event" title="event" id="event"
