@@ -23,9 +23,11 @@ import {
     Store
 } from '../utils/helpers'
 import qs from 'qs'
+import Cache from '../utils/cache'
 
 Vue.use(Vuex)
 
+const cache = new Cache()
 let store = new Store()
 
 // current event
@@ -92,44 +94,53 @@ store.stateObjectImplement(LIST, {
         let list = []
 
         let page = 0
+        const node = store.getters[NODE_ID]
 
-        const loop = async () => {
-            const {feed} = await api.get(`${API_PATH}node/feed/${store.getters[NODE_ID]}/grade-01-result+reverse+parent/item/game/compo+jam/?limit=50&offset=${page * 50}`)
+        const cacheData = cache.getEventListCache(node)
 
-            if (feed && feed.length > 0) {
-                const feedIds = feedFilter(feed)
+        if (!cacheData || (cacheData && cacheData.length === 0)) {
+            const loop = async () => {
+                const {feed} = await api.get(`${API_PATH}node/feed/${node}/grade-01-result+reverse+parent/item/game/compo+jam/?limit=50&offset=${page * 50}`)
 
-                list = [...list, ...feedIds]
+                if (feed && feed.length > 0) {
+                    const feedIds = feedFilter(feed)
 
-                page++
+                    list = [...list, ...feedIds]
 
-                if (feed.length === 50) {
-                    await loop()
+                    page++
+
+                    if (feed.length === 50) {
+                        await loop()
+                    }
                 }
             }
-        }
 
-        await loop()
+            await loop()
 
-        let nodes = []
-        const promises = []
+            let nodes = []
+            const promises = []
 
-        if (list && list.length > 0) {
-            let feedsChunks = chunkArray(list, MAX_NODES)
+            if (list && list.length > 0) {
+                let feedsChunks = chunkArray(list, MAX_NODES)
 
-            await asyncForEach(feedsChunks, async (feeds) => {
-                promises.push(new Promise(async (resolve) => {
-                    const {node} = await api.get(API_PATH + `node2/get/${feeds.join('+')}`)
-                    nodes = nodes.concat(nodesFieldsFilter(node))
+                await asyncForEach(feedsChunks, async (feeds) => {
+                    promises.push(new Promise(async (resolve) => {
+                        const {node} = await api.get(API_PATH + `node2/get/${feeds.join('+')}`)
+                        nodes = nodes.concat(nodesFieldsFilter(node))
 
-                    resolve()
-                }))
+                        resolve()
+                    }))
+                })
+            }
+
+            await Promise.all(promises).then(() => {
+                store.commit(LIST, nodes)
+                cache.setEventListCache(node, nodes)
             })
         }
-
-        await Promise.all(promises).then(() => {
-            store.commit(LIST, nodes)
-        })
+        else {
+            store.commit(LIST, cacheData)
+        }
     }
 })
 
