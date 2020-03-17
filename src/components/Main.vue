@@ -32,11 +32,19 @@
             </div>
         </div>
         <div v-if="this.$store.getters.page.length > 0" class="pagination">
-            <button v-if="paginationPrevAvailable" v-on:click="prev" class="btn btn--prev [ w-24 h12 mr-2 ]">
+            <button v-if="paginationFirstAvailable" v-on:click="first" class="btn btn--first [ w-12 h12 mx-1 ]">
+                <i class="fas fa-fast-backward"></i>
+            </button>
+
+            <button v-if="paginationPrevAvailable" v-on:click="prev" class="btn btn--prev [ w-24 h12 mx-1 ]">
                 &lt;&lt; Prev
             </button>
-            <button v-if="paginationNextAvailable" v-on:click="next" class="btn btn--next [ w-24 h12 ]">
+            <button v-if="paginationNextAvailable" v-on:click="next" class="btn btn--next [ w-24 h12 mx-1 ]">
                 Next &gt;&gt;
+            </button>
+
+            <button v-if="paginationLastAvailable" v-on:click="last" class="btn btn--last [ w-12 h12 mx-1 ]">
+                <i class="fas fa-fast-forward"></i>
             </button>
         </div>
     </section>
@@ -53,22 +61,37 @@
                 page: PAGE,
                 filteredList: FILTERED_LIST,
             }),
+            totalPagesCount() {
+                return Math.floor(this.filteredList.length / ITEM_LIMIT)
+            },
             paginationNextAvailable() {
-                return Math.floor(this.filteredList.length / ITEM_LIMIT) > this.pageNumber
+                return this.totalPagesCount > this.pageNumber
             },
             paginationPrevAvailable() {
                 return this.pageNumber > 0
+            },
+            paginationFirstAvailable() {
+                return this.pageNumber !== 0
+            },
+            paginationLastAvailable() {
+                return this.pageNumber !== this.totalPagesCount
             }
         },
         methods: {
             prev() {
-                this.pagination(-1)
+                this.pagination(this.pageNumber - 1)
             },
             next() {
-                this.pagination(1)
+                this.pagination(this.pageNumber + 1)
             },
-            async pagination(direction) {
-                this.$store.commit(PAGE_NUMBER, (this.pageNumber + direction))
+            first() {
+                this.pagination(0)
+            },
+            last() {
+                this.pagination(this.totalPagesCount)
+            },
+            async pagination(page) {
+                this.$store.commit(PAGE_NUMBER, page)
                 await this.$store.dispatch(PAGE)
 
                 window.scrollTo({
@@ -112,6 +135,11 @@
             &:active {
                 @apply bg-orange-700;
             }
+        }
+
+        &--first,
+        &--last {
+            @apply text-gray-800;
         }
     }
 
