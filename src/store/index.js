@@ -100,7 +100,7 @@ store.stateObjectImplement(LIST, {
 
         if (!cacheData || (cacheData && cacheData.length === 0)) {
             const loop = async () => {
-                const {feed} = await api.get(`${API_PATH}node/feed/${node}/grade-01-result+reverse+parent/item/game/compo+jam/?limit=50&offset=${page * 50}`)
+                const {feed} = await api.get(`${API_PATH}node/feed/${node}/smart+reverse+parent/item/game/compo+jam/?limit=50&offset=${page * 50}`)
 
                 if (feed && feed.length > 0) {
                     const feedIds = feedFilter(feed)
