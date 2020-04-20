@@ -23,6 +23,11 @@
             Main,
             AboutModal,
             // LoginModal,
+        },
+        mounted() {
+            setTimeout(() => {
+                this.$metrika.hit()
+            }, 1000)
         }
     }
 </script>
