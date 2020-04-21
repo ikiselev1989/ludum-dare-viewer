@@ -12,4 +12,8 @@ export default class Cache {
 
         return data ? JSON.parse(data) : null
     }
+
+    clearEventListCache(event) {
+        localStorage.removeItem(`${this.storageItemPrefix}${event}`)
+    }
 }

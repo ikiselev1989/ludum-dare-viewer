@@ -5,6 +5,9 @@
         </a>
 
         <form class="header__item filter-form">
+            <button class="filter-form__refresh-button" @click.prevent="refreshList"><i class="fas fa-sync-alt"></i>
+            </button>
+
             <select v-model="currentEvent" name="event" title="event" id="event"
                     class="filter-form__selector" @change="eventChange">
                 <option v-for="event in events" :value="event">{{ `Ludum Dare #${event}` }}</option>
@@ -54,6 +57,7 @@
     } from '../constants/store'
     import {ABOUT_MODAL_TOGGLE, LOADING_TOGGLE} from '../constants/events'
     import Checkbox from './partials/Checkbox'
+    import Cache from '../utils/cache'
 
     export default {
         data() {
@@ -150,6 +154,12 @@
             },
             aboutModal() {
                 this.$root.$emit(ABOUT_MODAL_TOGGLE, true)
+            },
+            refreshList() {
+                const cache = new Cache()
+                cache.clearEventListCache(this.$store.getters[NODE_ID])
+
+                this.eventChange()
             }
             // loginModal() {
             //     this.$root.$emit(LOGIN_MODAL_TOGGLE, true)
@@ -225,6 +235,10 @@
             & + & {
                 @apply ml-4;
             }
+        }
+
+        &__refresh-button {
+            @apply mr-6 text-white cursor-pointer;
         }
     }
 
