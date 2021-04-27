@@ -45,41 +45,42 @@
 </template>
 
 <script>
-    import {
-        CURRENT_EVENT,
-        CURRENT_TYPE,
-        FILTERED_LIST,
-        LIST,
-        NODE_ID,
-        PAGE,
-        PAGE_NUMBER,
-        PLATFORMS
-    } from '../constants/store'
-    import {ABOUT_MODAL_TOGGLE, LOADING_TOGGLE} from '../constants/events'
-    import Checkbox from './partials/Checkbox'
-    import Cache from '../utils/cache'
+import {
+    CURRENT_EVENT,
+    CURRENT_TYPE,
+    FILTERED_LIST,
+    LIST,
+    NODE_ID,
+    PAGE,
+    PAGE_NUMBER,
+    PLATFORMS,
+    VIEWED_LIST
+} from '../constants/store'
+import {ABOUT_MODAL_TOGGLE, LOADING_TOGGLE} from '../constants/events'
+import Checkbox from './partials/Checkbox'
+import Cache from '../utils/cache'
 
-    export default {
-        data() {
-            return {
-                rootPath: process.env.BASE_URL,
-                events: [],
-                types: ['All', 'Compo', 'Jam'],
-                filterActive: false
+export default {
+    data() {
+        return {
+            rootPath: process.env.BASE_URL,
+            events: [],
+            types: ['All', 'Compo', 'Jam'],
+            filterActive: false
+        }
+    },
+    components: {
+        Checkbox
+    },
+    computed: {
+        currentEvent: {
+            get() {
+                return this.$store.state[CURRENT_EVENT]
+            },
+            set(value) {
+                this.$store.commit(CURRENT_EVENT, value)
             }
         },
-        components: {
-            Checkbox
-        },
-        computed: {
-            currentEvent: {
-                get() {
-                    return this.$store.state[CURRENT_EVENT]
-                },
-                set(value) {
-                    this.$store.commit(CURRENT_EVENT, value)
-                }
-            },
             currentType: {
                 get() {
                     return this.$store.getters[CURRENT_TYPE]
@@ -115,6 +116,7 @@
                     this.resetPageNumber()
                     await this.nodeIdUpdate()
                     await this.listUpdate()
+                    await this.viewedListUpdate()
                     await this.filteredListUpdate()
                     await this.pageUpdate()
                 })
@@ -142,6 +144,9 @@
             },
             async listUpdate() {
                 await this.$store.dispatch(LIST)
+            },
+            async viewedListUpdate() {
+                await this.$store.dispatch(VIEWED_LIST)
             },
             async filteredListUpdate() {
                 await this.$store.dispatch(FILTERED_LIST)

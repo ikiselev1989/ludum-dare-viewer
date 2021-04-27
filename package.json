@@ -22,7 +22,7 @@
     "@vue/cli-service": "^4.1.0",
     "cross-env": "^7.0.2",
     "node-sass": "^4.13.1",
-    "qs": "latest",
+    "qs": "^6.10.1",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.10"
   },

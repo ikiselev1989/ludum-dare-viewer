@@ -1,5 +1,6 @@
 export const NODE_ID = 'node_id'
 export const LIST = 'list'
+export const VIEWED_LIST = 'viewed_list'
 export const PAGE_NUMBER = 'page_number'
 export const PAGE = 'page'
 export const FILTERED_LIST = 'filtered_list'

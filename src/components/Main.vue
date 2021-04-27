@@ -5,6 +5,8 @@
                 another event.
             </div>
             <div class="card [ w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 ]"
+                 :class="{ 'card__visited' : $store.getters.viewed_list.includes(value.id) }"
+                 v-on:click="setVisited(value.id)"
                  v-for="value in this.$store.getters.page"
                  :key="value.id">
 
@@ -49,56 +51,60 @@
 </template>
 
 <script>
-    import {FILTERED_LIST, ITEM_LIMIT, PAGE, PAGE_NUMBER} from '../constants/store'
-    import {mapGetters} from 'vuex'
+import {FILTERED_LIST, ITEM_LIMIT, PAGE, PAGE_NUMBER, VIEWED_LIST} from '../constants/store'
+import {mapGetters} from 'vuex'
 
-    export default {
-        computed: {
-            ...mapGetters({
-                pageNumber: PAGE_NUMBER,
-                page: PAGE,
-                filteredList: FILTERED_LIST,
-            }),
-            totalPagesCount() {
-                return Math.floor(this.filteredList.length / ITEM_LIMIT)
-            },
-            paginationNextAvailable() {
-                return this.totalPagesCount > this.pageNumber
-            },
-            paginationPrevAvailable() {
-                return this.pageNumber > 0
-            },
-            paginationFirstAvailable() {
-                return this.pageNumber !== 0
-            },
-            paginationLastAvailable() {
-                return this.pageNumber !== this.totalPagesCount
-            }
+export default {
+    computed: {
+        ...mapGetters({
+            pageNumber: PAGE_NUMBER,
+            page: PAGE,
+            filteredList: FILTERED_LIST,
+            viewedList: VIEWED_LIST,
+        }),
+        totalPagesCount() {
+            return Math.floor(this.filteredList.length / ITEM_LIMIT)
         },
-        methods: {
-            prev() {
-                this.pagination(this.pageNumber - 1)
-            },
-            next() {
-                this.pagination(this.pageNumber + 1)
-            },
-            first() {
-                this.pagination(0)
-            },
-            last() {
-                this.pagination(this.totalPagesCount)
-            },
-            async pagination(page) {
-                this.$store.commit(PAGE_NUMBER, page)
-                await this.$store.dispatch(PAGE)
+        paginationNextAvailable() {
+            return this.totalPagesCount > this.pageNumber
+        },
+        paginationPrevAvailable() {
+            return this.pageNumber > 0
+        },
+        paginationFirstAvailable() {
+            return this.pageNumber !== 0
+        },
+        paginationLastAvailable() {
+            return this.pageNumber !== this.totalPagesCount
+        }
+    },
+    methods: {
+        prev() {
+            this.pagination(this.pageNumber - 1)
+        },
+        next() {
+            this.pagination(this.pageNumber + 1)
+        },
+        first() {
+            this.pagination(0)
+        },
+        last() {
+            this.pagination(this.totalPagesCount)
+        },
+        async setVisited(id) {
+            await this.$store.dispatch(VIEWED_LIST, id)
+        },
+        async pagination(page) {
+            this.$store.commit(PAGE_NUMBER, page)
+            await this.$store.dispatch(PAGE)
 
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                })
-            }
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
         }
     }
+}
 </script>
 
 <style scoped lang="scss">
@@ -177,6 +183,21 @@
 
         &__source-link {
             @apply m-1 flex justify-center items-center;
+        }
+
+        &__visited {
+            .card__container {
+                position: relative;
+
+                &:after {
+                    content: '';
+                    @apply absolute;
+                    @apply inset-0;
+                    @apply bg-black;
+                    @apply opacity-25;
+                    @apply pointer-events-none;
+                }
+            }
         }
     }
 

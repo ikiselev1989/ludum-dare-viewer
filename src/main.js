@@ -6,7 +6,7 @@ import VueYandexMetrika from 'vue-yandex-metrika'
 Vue.config.productionTip = false
 
 Vue.use(VueYandexMetrika, {
-    id: '61151863',
+    id: '244ee7430ab9a70f',
     env: process.env.NODE_ENV
 })
 

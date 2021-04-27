@@ -1,15 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {
-    NODE_ID,
-    LIST,
-    PAGE_NUMBER,
     CURRENT_EVENT,
     CURRENT_TYPE,
-    USER,
-    PLATFORMS,
+    FILTERED_LIST,
+    ITEM_LIMIT,
+    LIST,
+    MAX_NODES,
+    NODE_ID,
     PAGE,
-    ITEM_LIMIT, MAX_NODES, FILTERED_LIST
+    PAGE_NUMBER,
+    PLATFORMS,
+    USER,
+    VIEWED_LIST
 } from '../constants/store'
 import {API_PATH} from '../constants/path'
 import api from '../utils/api'
@@ -141,6 +144,29 @@ store.stateObjectImplement(LIST, {
         else {
             store.commit(LIST, cacheData)
         }
+    }
+})
+
+// visited
+store.stateObjectImplement(VIEWED_LIST, {
+    value: [],
+    action: async ({commit, state, getters}, payload) => {
+        const node = getters[NODE_ID]
+        let cacheData = state[VIEWED_LIST]
+
+        if (payload) {
+            cacheData = [
+                ...cacheData,
+                payload
+            ]
+
+            cache.setViewedEventListCache(node, cacheData)
+        }
+        else {
+            cacheData = cache.getViewedEventListCache(node)
+        }
+
+        commit(VIEWED_LIST, cacheData)
     }
 })
 
