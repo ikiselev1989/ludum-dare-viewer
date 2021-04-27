@@ -5,12 +5,15 @@
                 another event.
             </div>
             <div class="card [ w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 ]"
-                 :class="{ 'card__visited' : $store.getters.viewed_list.includes(value.id) }"
+                 :class="{ 'card--visited' : $store.getters.viewed_list.includes(value.id) }"
                  v-on:click="setVisited(value.id)"
                  v-for="value in this.$store.getters.page"
                  :key="value.id">
 
                 <div class="card__container">
+                    <div class="card__overlay">
+                        <i class="fas fa-eye fa-3x"></i>
+                    </div>
                     <a :href="value.url" target="_blank">
                         <img :src="value.cover" :alt="value.name" class="card__image [ w-full h-64 sm:h-48 ]"/>
                     </a>
@@ -185,18 +188,29 @@ export default {
             @apply m-1 flex justify-center items-center;
         }
 
-        &__visited {
-            .card__container {
-                position: relative;
+        &__overlay {
+            @apply flex;
+            @apply justify-end;
+            @apply items-start;
+            @apply absolute;
+            @apply inset-0;
+            @apply bg-black;
+            @apply opacity-0;
+            @apply pointer-events-none;
 
-                &:after {
-                    content: '';
-                    @apply absolute;
-                    @apply inset-0;
-                    @apply bg-black;
-                    @apply opacity-25;
-                    @apply pointer-events-none;
-                }
+            .fas {
+                @apply m-2;
+                @apply text-white;
+            }
+        }
+
+        &--visited {
+            .card__container {
+                @apply relative;
+            }
+
+            .card__overlay {
+                @apply opacity-25;
             }
         }
     }
